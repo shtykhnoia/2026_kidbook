@@ -1,0 +1,195 @@
+{
+  "section": "8.1_ entertainment",
+  "topic": "Игры, фильмы и музыка: баланс пользы и развлечения",
+  "author_group": "Группа Скебоб",
+  "members": [
+    "Хереш Артемий",
+    "Фролов Матвей",
+    "Глушко Игорь",
+    "Хабирова Амина",
+    "Долбус Дмитрий",
+    "Канева Юлия"
+  ],
+  "concepts": [
+    {
+      "id": "8.1_ entertainment/computer_game",
+      "description": "О компьютерных играх, их истории, жанрах, пользе для развития и возможных рисках для детей",
+      "lemmas": ["компьютерная игра", "видеоигра", "геймер", "игровая индустрия", "гейминг"],
+      "name": "computer_game",
+      "file": "8.1_ entertainment/computer_game.md",
+      "wikidata_id": "Q7889",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/board_game",
+      "description": "О настольных играх, их разновидностях, истории и пользе для общения и развития логического мышления",
+      "lemmas": ["настольная игра", "настолка", "шахматы", "карточная игра", "кубик"],
+      "name": "board_game",
+      "file": "8.1_ entertainment/board_game.md",
+      "wikidata_id": "Q131436",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/educational_game",
+      "description": "Об образовательных играх, которые помогают учиться через развлечение и делают обучение увлекательным",
+      "lemmas": ["образовательная игра", "обучающая игра", "развивающая игра", "учёба через игру", "edutainment"],
+      "name": "educational_game",
+      "file": "8.1_ entertainment/educational_game.md",
+      "wikidata_id": "Q1141778",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/esports",
+      "description": "О киберспорте — профессиональных соревнованиях по компьютерным играм, их истории и влиянии на молодёжь",
+      "lemmas": ["киберспорт", "турнир", "профессиональный геймер", "стриминг", "соревнование"],
+      "name": "esports",
+      "file": "8.1_ entertainment/esports.md",
+      "wikidata_id": "Q300920",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/gamification",
+      "description": "О геймификации — использовании игровых элементов в учёбе, работе и повседневной жизни",
+      "lemmas": ["геймификация", "игровые механики", "баллы", "уровни", "мотивация"],
+      "name": "gamification",
+      "file": "8.1_ entertainment/gamification.md",
+      "wikidata_id": "Q1145661",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/film",
+      "description": "О фильмах — искусстве кинематографа, истории кино, жанрах и влиянии фильмов на культуру",
+      "lemmas": ["фильм", "кино", "актёр", "режиссёр", "сценарий"],
+      "name": "film",
+      "file": "8.1_ entertainment/film.md",
+      "wikidata_id": "Q11424",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/animation",
+      "description": "О мультфильмах — анимационном искусстве, его техниках, истории и любимых мультфильмах мира",
+      "lemmas": ["мультфильм", "анимация", "мультик", "аниме", "рисованный фильм"],
+      "name": "animation",
+      "file": "8.1_ entertainment/animation.md",
+      "wikidata_id": "Q202866",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/documentary",
+      "description": "О документальных фильмах — кино, которое рассказывает о реальных событиях, природе и людях",
+      "lemmas": ["документальный фильм", "документалка", "репортаж", "научное кино", "нон-фикшн"],
+      "name": "documentary",
+      "file": "8.1_ entertainment/documentary.md",
+      "wikidata_id": "Q93204",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/cinema",
+      "description": "О кинематографе — истории появления и развития кино как вида искусства и технологии",
+      "lemmas": ["кинематограф", "киноискусство", "кинопроизводство", "история кино", "киноплёнка"],
+      "name": "cinema",
+      "file": "8.1_ entertainment/cinema.md",
+      "wikidata_id": "Q5398426",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/vfx",
+      "description": "О спецэффектах в кино — компьютерной графике, практических эффектах и магии киноиндустрии",
+      "lemmas": ["спецэффекты", "визуальные эффекты", "компьютерная графика", "CGI", "трюки"],
+      "name": "vfx",
+      "file": "8.1_ entertainment/vfx.md",
+      "wikidata_id": "Q180985",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/music",
+      "description": "О музыке — искусстве звуков, истории музыки, её жанрах и влиянии на человека",
+      "lemmas": ["музыка", "мелодия", "звук", "ритм", "нота"],
+      "name": "music",
+      "file": "8.1_ entertainment/music.md",
+      "wikidata_id": "Q638",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/musical_instrument",
+      "description": "О музыкальных инструментах — их видах, истории создания и роли в оркестре и повседневной жизни",
+      "lemmas": ["музыкальный инструмент", "гитара", "пианино", "барабан", "оркестр"],
+      "name": "musical_instrument",
+      "file": "8.1_ entertainment/musical_instrument.md",
+      "wikidata_id": "Q34379",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/musical_genre",
+      "description": "О музыкальных жанрах — от классики до хип-хопа, как появились разные стили музыки",
+      "lemmas": ["музыкальный жанр", "рок", "поп", "хип-хоп", "стиль музыки"],
+      "name": "musical_genre",
+      "file": "8.1_ entertainment/musical_genre.md",
+      "wikidata_id": "Q188451",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/classical_music",
+      "description": "О классической музыке — великих композиторах, знаменитых произведениях и влиянии на мировую культуру",
+      "lemmas": ["классическая музыка", "симфония", "опера", "Бетховен", "Моцарт"],
+      "name": "classical_music",
+      "file": "8.1_ entertainment/classical_music.md",
+      "wikidata_id": "Q9730",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/song",
+      "description": "О песнях — искусстве сочетания музыки и слов, истории песенного жанра и знаменитых хитах",
+      "lemmas": ["песня", "текст песни", "припев", "куплет", "хит"],
+      "name": "song",
+      "file": "8.1_ entertainment/song.md",
+      "wikidata_id": "Q7366",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/entertainment",
+      "description": "О развлечениях — их видах, роли в жизни человека и правильном балансе между отдыхом и делами",
+      "lemmas": ["развлечение", "отдых", "досуг", "хобби", "свободное время"],
+      "name": "entertainment",
+      "file": "8.1_ entertainment/entertainment.md",
+      "wikidata_id": "Q173799",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/media_literacy",
+      "description": "О медиаграмотности — умении критически оценивать информацию из интернета, ТВ и социальных сетей",
+      "lemmas": ["медиаграмотность", "критическое мышление", "фейк", "информационная безопасность", "интернет"],
+      "name": "media_literacy",
+      "file": "8.1_ entertainment/media_literacy.md",
+      "wikidata_id": "Q1004817",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/movie_theater",
+      "description": "О кинотеатрах — истории кинозалов, технологиях показа фильмов и волшебной атмосфере большого экрана",
+      "lemmas": ["кинотеатр", "кинозал", "большой экран", "попкорн", "сеанс"],
+      "name": "movie_theater",
+      "file": "8.1_ entertainment/movie_theater.md",
+      "wikidata_id": "Q41253",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/composer",
+      "description": "О композиторах — людях, которые создают музыку, великих мастерах прошлого и современности",
+      "lemmas": ["композитор", "автор музыки", "дирижёр", "партитура", "сочинитель"],
+      "name": "composer",
+      "file": "8.1_ entertainment/composer.md",
+      "wikidata_id": "Q36834",
+      "author": "gigachat"
+    },
+    {
+      "id": "8.1_ entertainment/soundtrack",
+      "description": "О саундтреках — музыке к фильмам и играм, которая создаёт настроение и делает истории незабываемыми",
+      "lemmas": ["саундтрек", "музыка к фильму", "музыкальное сопровождение", "OST", "тема фильма"],
+      "name": "soundtrack",
+      "file": "8.1_ entertainment/soundtrack.md",
+      "wikidata_id": "Q492264",
+      "author": "gigachat"
+    }
+  ]
+}

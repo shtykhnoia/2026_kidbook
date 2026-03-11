@@ -33,38 +33,75 @@ load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONCEPTS_PATH = os.path.join(SCRIPT_DIR, "concepts.json")
 CONTEXTS_PATH = os.path.join(SCRIPT_DIR, "wikidata", "_contexts.json")
-OUTPUT_DIR = os.path.join(SCRIPT_DIR, "..", "..", "WEB", "entertainment")
+OUTPUT_DIR = os.path.join(SCRIPT_DIR, "..", "..", "WEB", "8.1_ entertainment")
 
 # Параметры генерации
 TEMPERATURE = 0.7
-MAX_TOKENS = 1500
+MAX_TOKENS = 3000
 MODEL = "GigaChat"  # бесплатная модель
 
+# Маппинг name → русское название для заголовка статьи
+TITLE_MAP = {
+    "computer_game": "Компьютерные игры",
+    "board_game": "Настольные игры",
+    "educational_game": "Образовательные игры",
+    "esports": "Киберспорт",
+    "gamification": "Геймификация",
+    "film": "Фильм",
+    "animation": "Мультфильм",
+    "documentary": "Документальный фильм",
+    "cinema": "Кинематограф",
+    "vfx": "Спецэффекты",
+    "music": "Музыка",
+    "musical_instrument": "Музыкальные инструменты",
+    "musical_genre": "Музыкальные жанры",
+    "classical_music": "Классическая музыка",
+    "song": "Песня",
+    "entertainment": "Развлечения",
+    "media_literacy": "Медиаграмотность",
+    "movie_theater": "Кинотеатр",
+    "composer": "Композитор",
+    "soundtrack": "Саундтрек",
+}
+
+
+def get_title(concept: dict) -> str:
+    return TITLE_MAP.get(concept["name"], concept["name"].replace("_", " ").title())
+
+
 SYSTEM_PROMPT = (
-    "Ты автор детской энциклопедии. Пиши просто, интересно и понятно "
-    "для десятилетнего ребёнка. Используй короткие предложения, яркие "
-    "примеры и аналогии из повседневной жизни. Добавляй забавные факты. "
-    "Структурируй текст с помощью markdown-заголовков."
+    "Ты автор детской энциклопедии для восьмиклассников. Пиши просто, "
+    "интересно и понятно для десятилетнего ребёнка. Используй короткие "
+    "предложения, яркие примеры и аналогии из повседневной жизни. "
+    "Добавляй забавные факты и сравнения. Структурируй текст с помощью "
+    "markdown-заголовков второго и третьего уровня (## и ###). "
+    "Пиши развёрнуто, подробно раскрывая каждый раздел."
 )
 
 USER_PROMPT_TEMPLATE = (
-    "Напиши статью для детской энциклопедии о понятии «{title}».\n\n"
-    "Требования:\n"
-    "- Объясни для десятилетнего ребёнка, что это такое\n"
-    "- Расскажи краткую историю\n"
-    "- Приведи 2-3 интересных факта\n"
-    "- Приведи примеры из реальной жизни\n"
-    "- Объясни, чем это полезно\n"
-    "- Расскажи, что может быть вредно при неправильном использовании\n"
-    "- Дай совет по балансу пользы и развлечения\n"
+    "Напиши подробную статью для детской энциклопедии о понятии «{title}».\n"
+    "Тема раздела: «Игры, фильмы и музыка: баланс пользы и развлечения».\n\n"
+    "Описание статьи: {description}\n\n"
+    "Требования к содержанию (каждый пункт раскрой подробно, минимум 2-3 абзаца на раздел):\n"
+    "1. Введение — объясни простыми словами, что это такое, зачем это существует\n"
+    "2. История — расскажи, как и когда это появилось, ключевые этапы развития\n"
+    "3. Основные виды или разновидности — перечисли и кратко опиши каждый вид\n"
+    "4. Интересные факты — приведи 3-5 удивительных и забавных фактов\n"
+    "5. Примеры из жизни — конкретные известные примеры, понятные детям\n"
+    "6. Польза — чем это полезно для развития, обучения, творчества\n"
+    "7. Возможные риски — что может быть вредно при неправильном использовании\n"
+    "8. Баланс пользы и развлечения — практические советы для ребёнка\n"
+    "9. Заключение — короткий итог\n"
     "{wikidata_context}"
-    "\nОтвет в формате markdown. Начни с заголовка # {title}."
+    "\nОтвет в формате markdown. Начни с заголовка первого уровня: # {title}.\n"
+    "Используй таблицы, списки и выделение жирным где уместно."
 )
 
 
 def load_concepts() -> list[dict]:
     with open(CONCEPTS_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+        data = json.load(f)
+    return data["concepts"]
 
 
 def load_wikidata_contexts() -> dict[str, str]:
@@ -78,8 +115,10 @@ def build_prompt(concept: dict, wikidata_context: str) -> str:
     ctx_block = ""
     if wikidata_context:
         ctx_block = f"\nДополнительная информация из WikiData: {wikidata_context}\n"
+    title = get_title(concept)
     return USER_PROMPT_TEMPLATE.format(
-        title=concept["title"],
+        title=title,
+        description=concept["description"],
         wikidata_context=ctx_block,
     )
 
@@ -139,17 +178,19 @@ def main():
         scope="GIGACHAT_API_PERS",
     ) as giga:
         for i, concept in enumerate(concepts, 1):
-            print(f"[{i}/{len(concepts)}] Генерирую: {concept['title']}...", end=" ")
+            title = get_title(concept)
+            print(f"[{i}/{len(concepts)}] Генерирую: {title}...", end=" ")
 
-            # Проверяем, не сгенерирован ли уже файл
-            output_path = os.path.join(OUTPUT_DIR, concept["file"])
+            # file: "entertainment/computer_game.md" → берём только имя файла
+            filename = os.path.basename(concept["file"])
+            output_path = os.path.join(OUTPUT_DIR, filename)
             if os.path.exists(output_path):
                 print("⏭ уже существует, пропускаю")
                 generated += 1
                 continue
 
             try:
-                ctx = wikidata_contexts.get(concept["id"], "")
+                ctx = wikidata_contexts.get(concept["name"], "")
                 text = generate_article(giga, concept, ctx)
 
                 with open(output_path, "w", encoding="utf-8") as f:

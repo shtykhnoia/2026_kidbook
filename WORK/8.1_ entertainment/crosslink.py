@@ -1,11 +1,12 @@
 """
 Скрипт для расстановки перекрёстных ссылок между статьями энциклопедии.
 
-Для каждого markdown-файла в WEB/entertainment/:
-1. Ищет вхождения падежных форм других понятий
-2. Заменяет первое вхождение каждого понятия на markdown-ссылку
-3. Не заменяет понятие внутри собственной статьи
-4. Не заменяет в заголовках (строки с #) и уже существующих ссылках
+Для каждого markdown-файла в WEB/8.1_ entertainment/:
+1. Генерирует все падежные формы из ключевых слов (lemmas) через pymorphy3
+2. Ищет вхождения этих форм в текстах других статей
+3. Заменяет первое вхождение каждого понятия на markdown-ссылку
+4. Не заменяет понятие внутри собственной статьи
+5. Не заменяет в заголовках (строки с #) и уже существующих ссылках
 
 Использование:
   python crosslink.py
@@ -17,27 +18,66 @@ import os
 import re
 import sys
 
+import pymorphy3
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONCEPTS_PATH = os.path.join(SCRIPT_DIR, "concepts.json")
-PAGES_DIR = os.path.join(SCRIPT_DIR, "..", "..", "WEB", "entertainment")
+PAGES_DIR = os.path.join(SCRIPT_DIR, "..", "..", "WEB", "8.1_ entertainment")
+
+morph = pymorphy3.MorphAnalyzer()
 
 
 def load_concepts() -> list[dict]:
     with open(CONCEPTS_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+        data = json.load(f)
+    return data["concepts"]
 
 
-def build_form_index(concepts: list[dict]) -> list[tuple[str, str, str]]:
+def get_word_forms(word: str) -> set[str]:
+    """Получить все падежные формы русского слова через pymorphy3."""
+    forms = {word.lower()}
+    parsed = morph.parse(word)
+    if parsed:
+        best = parsed[0]
+        for form in best.lexeme:
+            forms.add(form.word)
+    return forms
+
+
+def build_form_index(
+    concepts: list[dict],
+) -> list[tuple[str, str, str]]:
     """
-    Строит индекс: [(падежная_форма, concept_id, файл), ...]
-    Сортировка по убыванию длины формы — чтобы длинные фразы
-    матчились раньше коротких (например, "компьютерная игра" раньше "игра").
+    Строит индекс: [(regex_pattern, concept_name, файл), ...]
+    Для каждого ключевого слова (lemma) генерирует все падежные формы
+    через pymorphy3. Для многословных фраз склоняет каждое слово
+    отдельно и собирает комбинированный regex.
+    Сортировка по убыванию длины паттерна.
     """
     index = []
     for concept in concepts:
-        for form in concept["title_forms"]:
-            index.append((form.lower(), concept["id"], concept["file"]))
-    # Длинные формы первыми — чтобы "образовательная игра" матчилась раньше "игра"
+        filename = os.path.basename(concept["file"])
+        for lemma in concept["lemmas"]:
+            words = lemma.strip().split()
+            if len(words) == 1:
+                # Однословная лемма — каждая падежная форма отдельно
+                forms = get_word_forms(words[0])
+                for form in forms:
+                    pattern = re.escape(form)
+                    index.append((pattern, concept["name"], filename))
+            else:
+                # Многословная фраза — склоняем каждое слово,
+                # собираем regex вида (форма1|форма2)\s+(форма1|форма2)
+                parts = []
+                for w in words:
+                    forms = get_word_forms(w)
+                    escaped = [
+                        re.escape(f) for f in sorted(forms, key=lambda x: -len(x))
+                    ]
+                    parts.append("(?:" + "|".join(escaped) + ")")
+                pattern = r"\s+".join(parts)
+                index.append((pattern, concept["name"], filename))
+    # Длинные паттерны первыми — чтобы "образовательная игра" матчилась раньше "игра"
     index.sort(key=lambda x: -len(x[0]))
     return index
 
@@ -60,7 +100,7 @@ def add_crosslinks(
         if not line.strip():
             continue
 
-        for form, concept_id, filename in form_index:
+        for form_pattern, concept_id, filename in form_index:
             # Не ставим ссылку на самого себя
             if concept_id == current_concept_id:
                 continue
@@ -71,7 +111,7 @@ def add_crosslinks(
             # Ищем форму слова (с границами слов, регистронезависимо)
             pattern = re.compile(
                 r"(?<!\[)(?<!\()"  # не внутри существующей ссылки
-                r"\b(" + re.escape(form) + r")\b"
+                r"\b(" + form_pattern + r")\b"
                 r"(?!\]|\))",  # не внутри существующей ссылки
                 re.IGNORECASE,
             )
@@ -93,7 +133,7 @@ def add_crosslinks(
 
 def find_concept_by_file(concepts: list[dict], filename: str) -> dict | None:
     for c in concepts:
-        if c["file"] == filename:
+        if os.path.basename(c["file"]) == filename:
             return c
     return None
 
@@ -133,10 +173,10 @@ def main():
         with open(filepath, "r", encoding="utf-8") as f:
             original_text = f.read()
 
-        new_text, changes = add_crosslinks(original_text, concept["id"], form_index)
+        new_text, changes = add_crosslinks(original_text, concept["name"], form_index)
 
         if changes:
-            print(f"📝 {filename} ({concept['title']}): {len(changes)} ссылок")
+            print(f"📝 {filename} ({concept['name']}): {len(changes)} ссылок")
             for change in changes:
                 print(change)
 
